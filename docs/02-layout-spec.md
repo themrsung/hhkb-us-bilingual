@@ -23,21 +23,33 @@ role:      Aux | System | Space | LangToggle | Aux
 hardware:  Alt | ◇       | Space | ◇            | Alt      (stock HHKB US, recommended DIP settings)
 ```
 
-Only position 4 needs a software rule. Scope that rule to the HHKB (USB vendor `1278`) when the
-tool can do per-device rules, so other keyboards keep their right System key.
+Positions 1, 2, 3 and 5 come from the hardware. Position 4 (right ◇) gets LangToggle from the
+first rung that can do it (`01-hardware.md`):
+
+1. **DIP switches**: keep the stock row. They can't make a LangToggle key.
+2. **Keymap tool** (HYBRID family, Classic, Studio): right ◇ → a code the OS understands without
+   software (`LANG1` for Windows / Linux, Caps Lock for macOS). On the Studio, one profile per OS.
+3. **Software**: remap right ◇ (or the firmware code from rung 2) to the OS's LangToggle. The
+   Pro BT and other boards without a keymap tool always need this rung.
+
+Scope software rules to the HHKB (USB vendor `1278`) when the tool can do per-device rules, so
+other keyboards keep their right System key.
 
 The key left of A stays Control. Nothing else on the board changes.
 
 ## Per-OS mapping
 
-| OS | System | Aux | LangToggle is sent as | Tool for the right ◇ remap | Example files |
-| --- | --- | --- | --- | --- | --- |
-| **macOS** | Command | Option | `caps_lock`, with "Use the Caps Lock key to switch to and from ABC" on | Karabiner-Elements | [`karabiner/`](../karabiner/) ([`03-macos.md`](03-macos.md)) |
-| **Windows** | Win | Alt | 한/영 (`VK_HANGUL`, 0x15) to the Microsoft Korean IME | AutoHotkey v2 or PowerToys Keyboard Manager | none ([`04-windows.md`](04-windows.md)) |
-| **Linux** | Super | Alt | `Hangul` keysym, or whatever the IME (fcitx5 / IBus) uses to toggle | keyd (any session), or the desktop's own settings | none ([`05-other-os.md`](05-other-os.md)) |
-| **Android** | Meta | Alt | Ctrl+Space (switches the physical keyboard layout) | Key-remapping app, or none | none |
-| **iPadOS** | Command | Option | Caps Lock (with "switch to/from Latin" on), or Globe | Settings → Hardware Keyboard → Modifier Keys (limited) | none |
-| **ChromeOS** | Search/Launcher | Alt | Ctrl+Space | ChromeOS keyboard settings (limited) | none |
+| OS | System | Aux | LangToggle is sent as | Firmware code for right ◇ (rung 2) | Software for right ◇ (rung 3) | Doc |
+| --- | --- | --- | --- | --- | --- | --- |
+| **macOS** | Command | Option | `caps_lock`, with "Use the Caps Lock key to switch to and from ABC" on | Caps Lock (macOS-only boards), or `LANG1` + a Karabiner rule | Karabiner-Elements, example rules in [`karabiner/`](../karabiner/) | [`03-macos.md`](03-macos.md) |
+| **Windows** | Win | Alt | 한/영 in the Microsoft Korean IME (`VK_HANGUL`, 0x15, or the IME's 한 / 영 state set directly) | `LANG1` (native 한/영, no software) | AutoHotkey v2 | [`04-windows.md`](04-windows.md) |
+| **Linux** | Super | Alt | `Hangul` keysym, or whatever the IME (fcitx5 / IBus) uses to toggle | `LANG1` (`KEY_HANGEUL`) | keyd, or the desktop's own settings | [`05-other-os.md`](05-other-os.md) |
+| **Android** | Meta | Alt | Ctrl+Space (switches the physical keyboard layout) | none known | Key-remapping app, or none | [`05-other-os.md`](05-other-os.md) |
+| **iPadOS** | Command | Option | Caps Lock (with "switch to/from Latin" on), or Globe | Caps Lock | Settings → Hardware Keyboard → Modifier Keys (limited) | [`05-other-os.md`](05-other-os.md) |
+| **ChromeOS** | Search/Launcher | Alt | Ctrl+Space | none known | ChromeOS keyboard settings (limited) | [`05-other-os.md`](05-other-os.md) |
+
+Anything else, an existing remapper the user prefers (kanata, keyd, Hammerspoon, …), or custom
+firmware on a replacement controller: [`08-advanced.md`](08-advanced.md).
 
 `TODO(hardware)`: only the OSes the author actually uses will be checked. Everything else in
 this table is a starting point for the agent, not a tested result.

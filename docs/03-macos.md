@@ -4,14 +4,37 @@
 | --- | --- | --- |
 | Aux | Option | Hardware (stock Alt) |
 | System | Command | Hardware (stock ◇) |
-| LangToggle | Caps Lock → switches ABC ⇄ Korean 2-Set | Karabiner-Elements (right Command → `caps_lock`) + a macOS setting |
+| LangToggle | Caps Lock → switches ABC ⇄ Korean 2-Set | The first rung that can do it: keymap tool (Caps Lock or `LANG1` on right ◇), else Karabiner-Elements (right Command → `caps_lock`). Plus a macOS setting |
 
-`TODO(hardware)`: none of this has been run against a US HHKB yet.
+`TODO(hardware)`: none of this has been run against a US HHKB yet. Findings marked "JIS repo"
+were checked on JIS boards in
+[hhkb-ekj-trilingual](https://github.com/themrsung/hhkb-ekj-trilingual) and are expected, not
+known, to carry over.
+
+## Which path
+
+| Board | Right ◇ from the keymap tool (`01-hardware.md`, Step 2) | Karabiner needed? | Rule to enable |
+| --- | --- | --- | --- |
+| **Pro BT**, Pro 2 (no keymap tool) | stock (`right_command`) | **Yes** | right Command → Caps Lock **[default]** |
+| HYBRID / Classic / Studio, used only with macOS (or Studio with a macOS profile) | **Caps Lock** | **No** | none. Do sections 1–2 and stop |
+| HYBRID / Classic, shared with Windows | **`LANG1`** (`japanese_kana`) | Yes | LANG1 → Caps Lock **[keymap-tool boards]** |
+| Any board, if the tool step was skipped | stock | Yes | right Command → Caps Lock **[default]** |
 
 ## 1. Keyboard type
 
 When macOS asks to identify the new keyboard (Keyboard Setup Assistant), pick **ANSI**. To change
 it later: System Settings → Keyboard → Keyboard Type / Change Keyboard Type… → ANSI.
+
+Check:
+
+```sh
+defaults read /Library/Preferences/com.apple.keyboardtype
+# the HHKB's entry ("<product>-1278-0") must be 40 (ANSI). 41 = ISO, 42 = JIS
+```
+
+JIS repo: the JIS Studio over Bluetooth reused its USB entry (`21-1278-0`) and got no separate
+Bluetooth entry. `TODO(hardware)`: check which entry (if any) the Pro BT gets over Bluetooth,
+since it may report a different vendor ID there (`01-hardware.md`).
 
 ## 2. Input sources
 
@@ -33,7 +56,15 @@ Check the current source: the input menu in the menu bar, or
 defaults read com.apple.HIToolbox AppleSelectedInputSources
 ```
 
+**Why a key event and not `select_input_source`:** Caps Lock (and Ctrl+Space) are real key events
+that macOS handles itself. Selecting Korean from a background tool (Karabiner's
+`select_input_source`, Hammerspoon, im-select, …) hits a macOS bug about 1 time in 100: the menu
+bar says Korean, but the focused text field keeps typing English. Don't switch this setup to
+`select_input_source`. See [`../issues/macos-cjk-select-desync.md`](../issues/macos-cjk-select-desync.md).
+
 ## 3. Karabiner-Elements
+
+Skip this section if the keymap tool already put Caps Lock on right ◇ (see "Which path").
 
 ```sh
 brew install --cask karabiner-elements
@@ -44,8 +75,10 @@ Or download the `.dmg` from <https://karabiner-elements.pqrs.org/>. Then the **u
 1. Open Karabiner-Elements and follow its setup prompts.
 2. System Settings → General → **Login Items & Extensions** → Driver Extensions → allow
    **Karabiner-DriverKit-VirtualHIDDevice**.
-3. System Settings → Privacy & Security → **Input Monitoring** → allow the Karabiner entries.
-4. Karabiner-Elements → **Devices**: turn on "Modify events" for the HHKB.
+3. System Settings → Privacy & Security → **Input Monitoring** → allow the Karabiner entries
+   (`karabiner_grabber` / `karabiner_observer`, or Karabiner-Core-Service on newer versions).
+4. Karabiner-Elements → **Devices**: turn on "Modify events" for the HHKB, **for every entry it
+   shows up as** (see "Bluetooth" below).
 5. Karabiner-Elements → **Virtual Keyboard**: keyboard type **ANSI**.
 
 ### Import the example rules (drag and drop)
@@ -64,16 +97,61 @@ cp karabiner/hhkb-us-bilingual.json ~/.config/karabiner/assets/complex_modificat
 Then Karabiner-Elements → **Complex Modifications** → **Add predefined rule** → "HHKB US bilingual"
 → enable **one** of:
 
-| Rule | Sends | Use when |
-| --- | --- | --- |
-| **right Command → Caps Lock** (default) | `caps_lock` | Normal case. Needs the setting from section 2, step 4 |
-| right Command → Ctrl+Space (alternative) | Ctrl+Space | Caps Lock switching misbehaves (missed taps, lag). Needs "Select the previous input source" = Ctrl+Space in System Settings → Keyboard → Keyboard Shortcuts → Input Sources |
+| Rule | From | Sends | Use when |
+| --- | --- | --- | --- |
+| **right Command → Caps Lock** [default] | `right_command` | `caps_lock` | Stock right ◇ (Pro BT, Pro 2, or the keymap step was skipped). Needs the setting from section 2, step 4 |
+| right Command → Ctrl+Space [alternative] | `right_command` | Ctrl+Space | Caps Lock switching misbehaves (missed taps, lag). Needs "Select the previous input source" = Ctrl+Space in System Settings → Keyboard → Keyboard Shortcuts → Input Sources |
+| LANG1 → Caps Lock [keymap-tool boards] | `japanese_kana` (HID `LANG1`) | `caps_lock` | The keymap tool set right ◇ to `LANG1` so Windows gets 한/영 natively (`01-hardware.md`, Step 2). Needs the setting from section 2, step 4 |
 
-**Don't enable both.** They catch the same key.
+**Don't enable both right Command rules.** They catch the same key. The LANG1 rule catches a
+different key and only matters on keymap-tool boards.
 
-Both rules are scoped to `vendor_id 1278` (any PFU keyboard), so other keyboards keep their right
+All rules are scoped to `vendor_id 1278` (any PFU keyboard), so other keyboards keep their right
 Command. `TODO(hardware)`: once the product ID is known, add `"product_id": <id>` to the
-identifiers so a JIS HHKB on the same Mac isn't affected.
+identifiers so a JIS HHKB on the same Mac isn't affected. If the board reports a different vendor
+ID over Bluetooth, add a second identifier with the IDs `karabiner_cli` shows.
+
+### Bluetooth
+
+From the JIS repo, checked on a JIS Studio:
+
+- **Over USB** the Studio shows up three times (keyboard, pointing device, consumer). Only the
+  keyboard entry needs "Modify events".
+- **Over Bluetooth** it shows up **once**, as `HHKB-Studio<n>`, a combined keyboard + pointing
+  device. Karabiner doesn't grab pointing devices by default, so it only *observes* this one and
+  **no rule fires**. Fix: turn on "Modify events" for that entry (in `karabiner.json`: a
+  `devices` entry with `"is_keyboard": true, "is_pointing_device": true, "vendor_id": 1278,
+  "product_id": <id>` and `"ignore": false`). The pointing stick and gesture pads keep working
+  through Karabiner. `/var/log/karabiner/core_service.log` shows `… monitor is started
+  (grabbed)` once it's in place.
+- The number in `HHKB-Studio<n>` is the pairing slot. Match on vendor / product ID, not the name.
+
+`TODO(hardware)`: check how the Pro BT and HYBRID show up over Bluetooth (one entry or several,
+which flags, which vendor ID).
+
+### Built-in keyboard that isn't ANSI
+
+Karabiner sends every keyboard it grabs through **one** virtual keyboard, with one keyboard type
+(no per-device type in Karabiner-Elements 16.3.0). With the virtual keyboard set to ANSI, a grabbed
+**JIS or ISO** built-in keyboard (a JIS or ISO MacBook) types some symbols wrong. JIS repo: the
+mirror case (JIS virtual keyboard, US MacBook) was seen on a MacBook Air (M4).
+
+Fix: let Karabiner ignore the built-in keyboard, so macOS reads it natively. First check that no
+enabled Karabiner rule needs it, because ignoring it turns those off.
+
+```sh
+# Apple silicon: the built-in keyboard is {"is_keyboard": true} with no vendor/product ID.
+# Intel Macs report vendor_id 1452 and a product_id; use those instead.
+KJ=~/.config/karabiner/karabiner.json
+cp "$KJ" "$KJ.bak-$(date +%Y%m%d%H%M%S)"
+jq '.profiles |= map(if .selected then
+      .devices = (if any((.devices // [])[]; .identifiers == {"is_keyboard": true})
+                  then .devices | map(if .identifiers == {"is_keyboard": true} then .ignore = true else . end)
+                  else (.devices // []) + [{ "identifiers": { "is_keyboard": true }, "ignore": true }] end)
+    else . end)' "$KJ" > "$KJ.tmp" && mv "$KJ.tmp" "$KJ"
+```
+
+A US built-in keyboard needs nothing: it matches the ANSI virtual keyboard.
 
 ### Notes
 

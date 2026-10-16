@@ -38,6 +38,25 @@
           ]
         }
       ]
+    },
+    {
+      "description": "HHKB US: LANG1 from the keymap tool → LangToggle (Caps Lock input switching) [keymap-tool boards]",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "japanese_kana",
+            "modifiers": { "optional": ["any"] }
+          },
+          "to": [{ "key_code": "caps_lock" }],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [{ "vendor_id": 1278, "is_keyboard": true }]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

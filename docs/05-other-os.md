@@ -2,7 +2,10 @@
 
 No example files, none of it tested. The agent builds the config from
 [`02-layout-spec.md`](02-layout-spec.md), says which tool it will use, and asks before installing
-anything. The notes below are starting points.
+anything. The notes below are starting points. Use these with the **Advanced** prompt in the
+README, which also covers existing remappers and custom firmware ([`08-advanced.md`](08-advanced.md)).
+
+The ladder still applies: DIP switches, then the keymap tool, then software (`01-hardware.md`).
 
 ## Linux
 
@@ -23,6 +26,9 @@ anything. The notes below are starting points.
   `TODO(hardware)`: check the key name (`hangeul`) against `keyd list-keys`, fill in the product
   ID, and check the IME reacts to it. If the IME doesn't see `Hangul`, map to the IME's own toggle
   combo instead (e.g. `C-space`).
+- **Keymap-tool boards:** if right ◇ already sends `LANG1` (`01-hardware.md`, Step 2), Linux is
+  expected to see it as `KEY_HANGEUL` (keysym `Hangul`), so only the IME's toggle key needs setting
+  and keyd isn't needed. `TODO(hardware)`: check with `wev` / `evtest`.
 - Check: `sudo keyd monitor`, or `wev` (Wayland) / `xev` (X11).
 
 ## Android
