@@ -1,0 +1,43 @@
+{
+  "title": "HHKB US bilingual",
+  "rules": [
+    {
+      "description": "HHKB US: right Command → LangToggle (Caps Lock input switching) [default]",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "right_command",
+            "modifiers": { "optional": ["any"] }
+          },
+          "to": [{ "key_code": "caps_lock" }],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [{ "vendor_id": 1278, "is_keyboard": true }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "HHKB US: right Command → LangToggle (Ctrl+Space, select previous input source) [alternative]",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "right_command",
+            "modifiers": { "optional": ["any"] }
+          },
+          "to": [{ "key_code": "spacebar", "modifiers": ["left_control"] }],
+          "conditions": [
+            {
+              "type": "device_if",
+              "identifiers": [{ "vendor_id": 1278, "is_keyboard": true }]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
