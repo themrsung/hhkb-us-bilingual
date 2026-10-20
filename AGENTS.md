@@ -14,10 +14,12 @@ detailed steps are in `docs/`:
 | [`docs/06-customization.md`](docs/06-customization.md) | Other languages, other bottom-row layouts, tap/hold |
 | [`docs/07-verification.md`](docs/07-verification.md) | Acceptance checklist and troubleshooting |
 | [`docs/08-advanced.md`](docs/08-advanced.md) | Advanced: fitting the layout into the user's own remapper or firmware, or building custom firmware |
-| [`issues/`](issues/README.md) | Known issues carried over from the JIS repo: DIP switches resetting the keymap, Studio SW6 power saving, the macOS input-source desync, Windows' per-window language, inter-OS muscle memory. Check here before "fixing" something |
+| [`issues/`](issues/README.md) | Known issues carried over from the JIS repo: DIP switches resetting the keymap, Studio SW6 power saving, a US HHKB on a Mac whose Karabiner virtual keyboard is JIS, the macOS input-source desync, Windows' per-window language, inter-OS muscle memory. Check here before "fixing" something |
 
 Example config files: [`karabiner/`](karabiner/) (macOS only, drag-and-drop complex
-modifications for Karabiner-Elements).
+modifications for Karabiner-Elements). `hhkb-us-bilingual.json` is the normal one.
+`hhkb-us-on-jis-virtual.json` is only for a Mac whose Karabiner virtual keyboard is JIS
+(`issues/macos-jis-virtual-keyboard.md`).
 
 **No binaries, no scripts, on purpose.** The repo is instructions plus example config. Don't add
 installers, helper executables, or a config framework. On an OS without example files, write the

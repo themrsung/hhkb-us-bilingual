@@ -69,20 +69,20 @@ pairing, permission prompts, and key-press checks.
 | [Windows](#windows) | A Windows 11 PC | AutoHotkey v2 (script in `docs/04-windows.md`), only if the keyboard can't do LangToggle itself |
 | [Advanced](#advanced) | Any OS, your own remapper or firmware, or custom firmware | Whatever you already use, or a firmware build you approve |
 
-All three are **pinned to the release tag `v0.2.0-dev`**. The agent reads the docs exactly as they
+All three are **pinned to the release tag `v0.2.1-dev`**. The agent reads the docs exactly as they
 were at that release, even if `main` changes later.
 
 ### macOS
 
 ```text
 Set up my HHKB US-layout bilingual keyboard on this Mac, following the hhkb-us-bilingual repo
-pinned at tag v0.2.0-dev. This is the macOS path: Karabiner-Elements is the software layer.
+pinned at tag v0.2.1-dev. This is the macOS path: Karabiner-Elements is the software layer.
 
 Source of truth (use this tag only — not main, not any other ref):
-  Entry point: https://github.com/themrsung/hhkb-us-bilingual/blob/v0.2.0-dev/AGENTS.md
-  Get the repo:  git clone --depth 1 --branch v0.2.0-dev https://github.com/themrsung/hhkb-us-bilingual.git
+  Entry point: https://github.com/themrsung/hhkb-us-bilingual/blob/v0.2.1-dev/AGENTS.md
+  Get the repo:  git clone --depth 1 --branch v0.2.1-dev https://github.com/themrsung/hhkb-us-bilingual.git
   (If you can't clone, fetch each file from
-   https://raw.githubusercontent.com/themrsung/hhkb-us-bilingual/v0.2.0-dev/<path>, starting with
+   https://raw.githubusercontent.com/themrsung/hhkb-us-bilingual/v0.2.1-dev/<path>, starting with
    AGENTS.md and then every file under docs/, issues/ and karabiner/ that it links to.)
 Clone into a temporary/scratch directory, read AGENTS.md, all of docs/ and issues/ in full, and
 follow them. Do not download or run any binaries; this repo contains none.
@@ -127,13 +127,13 @@ what changed and where the backups are.
 
 ```text
 Set up my HHKB US-layout bilingual keyboard on this Windows PC, following the hhkb-us-bilingual
-repo pinned at tag v0.2.0-dev. This is the Windows path: AutoHotkey v2 is the software layer.
+repo pinned at tag v0.2.1-dev. This is the Windows path: AutoHotkey v2 is the software layer.
 
 Source of truth (use this tag only — not main, not any other ref):
-  Entry point: https://github.com/themrsung/hhkb-us-bilingual/blob/v0.2.0-dev/AGENTS.md
-  Get the repo:  git clone --depth 1 --branch v0.2.0-dev https://github.com/themrsung/hhkb-us-bilingual.git
+  Entry point: https://github.com/themrsung/hhkb-us-bilingual/blob/v0.2.1-dev/AGENTS.md
+  Get the repo:  git clone --depth 1 --branch v0.2.1-dev https://github.com/themrsung/hhkb-us-bilingual.git
   (If you can't clone, fetch each file from
-   https://raw.githubusercontent.com/themrsung/hhkb-us-bilingual/v0.2.0-dev/<path>, starting with
+   https://raw.githubusercontent.com/themrsung/hhkb-us-bilingual/v0.2.1-dev/<path>, starting with
    AGENTS.md and then every file under docs/, issues/ and karabiner/ that it links to.)
 Clone into a temporary/scratch directory, read AGENTS.md, all of docs/ and issues/ in full, and
 follow them. Do not download or run any binaries; this repo contains none.
@@ -179,14 +179,14 @@ what changed and where the backups are.
 
 ```text
 Help me set up my HHKB US-layout bilingual keyboard, following the hhkb-us-bilingual repo pinned
-at tag v0.2.0-dev. This is the Advanced path (docs/08-advanced.md): fit the layout into a setup I
+at tag v0.2.1-dev. This is the Advanced path (docs/08-advanced.md): fit the layout into a setup I
 already have, or help me build custom firmware for my keyboard.
 
 Source of truth (use this tag only — not main, not any other ref):
-  Entry point: https://github.com/themrsung/hhkb-us-bilingual/blob/v0.2.0-dev/AGENTS.md
-  Get the repo:  git clone --depth 1 --branch v0.2.0-dev https://github.com/themrsung/hhkb-us-bilingual.git
+  Entry point: https://github.com/themrsung/hhkb-us-bilingual/blob/v0.2.1-dev/AGENTS.md
+  Get the repo:  git clone --depth 1 --branch v0.2.1-dev https://github.com/themrsung/hhkb-us-bilingual.git
   (If you can't clone, fetch each file from
-   https://raw.githubusercontent.com/themrsung/hhkb-us-bilingual/v0.2.0-dev/<path>, starting with
+   https://raw.githubusercontent.com/themrsung/hhkb-us-bilingual/v0.2.1-dev/<path>, starting with
    AGENTS.md and then every file under docs/, issues/ and karabiner/ that it links to.)
 Clone into a temporary/scratch directory, read AGENTS.md, all of docs/ and issues/ in full, and
 follow them. Do not download or run any binaries; this repo contains none.

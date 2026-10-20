@@ -19,6 +19,7 @@ known, to carry over.
 | HYBRID / Classic / Studio, used only with macOS (or Studio with a macOS profile) | **Caps Lock** | **No** | none. Do sections 1–2 and stop |
 | HYBRID / Classic, shared with Windows | **`LANG1`** (`japanese_kana`) | Yes | LANG1 → Caps Lock **[keymap-tool boards]** |
 | Any board, if the tool step was skipped | stock | Yes | right Command → Caps Lock **[default]** |
+| Any board, on a Mac whose Karabiner virtual keyboard is **JIS** (shared with a JIS HHKB) | stock | **No**: keep the US HHKB ignored | none. Ctrl+Space via "Select the previous input source" (`../issues/macos-jis-virtual-keyboard.md`) |
 
 ## 1. Keyboard type
 
@@ -33,8 +34,9 @@ defaults read /Library/Preferences/com.apple.keyboardtype
 ```
 
 JIS repo: the JIS Studio over Bluetooth reused its USB entry (`21-1278-0`) and got no separate
-Bluetooth entry. `TODO(hardware)`: check which entry (if any) the Pro BT gets over Bluetooth,
-since it may report a different vendor ID there (`01-hardware.md`).
+Bluetooth entry. The Pro BT, paired over Bluetooth on the author's Mac, has **no entry at all**
+(no `514-1278-0`). `TODO(hardware)`: check whether macOS then treats it as ANSI, and whether
+Keyboard Setup Assistant can add the entry.
 
 ## 2. Input sources
 
@@ -79,7 +81,8 @@ Or download the `.dmg` from <https://karabiner-elements.pqrs.org/>. Then the **u
    (`karabiner_grabber` / `karabiner_observer`, or Karabiner-Core-Service on newer versions).
 4. Karabiner-Elements → **Devices**: turn on "Modify events" for the HHKB, **for every entry it
    shows up as** (see "Bluetooth" below).
-5. Karabiner-Elements → **Virtual Keyboard**: keyboard type **ANSI**.
+5. Karabiner-Elements → **Virtual Keyboard**: keyboard type **ANSI**, unless the Mac already uses
+   JIS for a JIS HHKB (see "Virtual keyboard type" below).
 
 ### Import the example rules (drag and drop)
 
@@ -107,9 +110,9 @@ Then Karabiner-Elements → **Complex Modifications** → **Add predefined rule*
 different key and only matters on keymap-tool boards.
 
 All rules are scoped to `vendor_id 1278` (any PFU keyboard), so other keyboards keep their right
-Command. `TODO(hardware)`: once the product ID is known, add `"product_id": <id>` to the
-identifiers so a JIS HHKB on the same Mac isn't affected. If the board reports a different vendor
-ID over Bluetooth, add a second identifier with the IDs `karabiner_cli` shows.
+Command. If a JIS HHKB is used on the same Mac, add the US board's `"product_id"` to the
+identifiers so the JIS board keeps its right Command. Pro BT: `514`, over Bluetooth, with the same
+vendor ID `1278` (`01-hardware.md`). `TODO(hardware)`: product IDs of the other US models.
 
 ### Bluetooth
 
@@ -126,8 +129,11 @@ From the JIS repo, checked on a JIS Studio:
   (grabbed)` once it's in place.
 - The number in `HHKB-Studio<n>` is the pairing slot. Match on vendor / product ID, not the name.
 
-`TODO(hardware)`: check how the Pro BT and HYBRID show up over Bluetooth (one entry or several,
-which flags, which vendor ID).
+The **Pro BT** shows up **once**, as `HHKB-BT`: `is_keyboard` only, `vendor_id 1278`,
+`product_id 514`, transport `Bluetooth`. It isn't a pointing device, so the Studio fix above isn't
+needed. Turning on "Modify events" for that one entry is enough (in `karabiner.json`: a `devices`
+entry with `"is_keyboard": true, "vendor_id": 1278, "product_id": 514` and `"ignore": false`).
+`TODO(hardware)`: check that the rule fires over Bluetooth, and how the HYBRID shows up.
 
 ### Built-in keyboard that isn't ANSI
 
@@ -152,6 +158,19 @@ jq '.profiles |= map(if .selected then
 ```
 
 A US built-in keyboard needs nothing: it matches the ANSI virtual keyboard.
+
+### Virtual keyboard type on a Mac shared with a JIS HHKB
+
+The author's MacBook Air (M4) has a US built-in keyboard, but its Karabiner virtual keyboard is
+**JIS**, for the JIS HHKBs set up by hhkb-ekj-trilingual. The built-in keyboard is set to
+`ignore: true`, so macOS reads it natively. The US HHKB can't be ignored the same way when it
+needs the right Command rule: Karabiner then sends it through the JIS virtual keyboard.
+Its symbol keys would then type the JIS legends. So on such a Mac, **don't** turn on "Modify
+events" for the US HHKB and **don't** switch the virtual keyboard to ANSI without asking: the JIS
+boards on the same Mac depend on it. Keep the US HHKB ignored and use Ctrl+Space for LangToggle, or
+add per-key translation rules first: the untested example
+[`../karabiner/hhkb-us-on-jis-virtual.json`](../karabiner/hhkb-us-on-jis-virtual.json). See
+[`../issues/macos-jis-virtual-keyboard.md`](../issues/macos-jis-virtual-keyboard.md).
 
 ### Notes
 

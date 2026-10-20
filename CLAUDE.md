@@ -12,8 +12,10 @@ This repo has no build, tests or code. It's Markdown instructions plus example K
 rule files. It's the US-layout sibling of `hhkb-ekj-trilingual` (JIS), and copies that repo's
 structure and conventions.
 
-**Status: planning.** The author doesn't have the board yet. It will be an **HHKB Professional BT**
-(US), used over Bluetooth (USB for power; check whether it carries data). It has no keymap-tool
+**Status: planning.** The author's board is an **HHKB Professional BT** (US, PD-KB600B), used
+over Bluetooth with a MacBook Air (M4, US built-in keyboard) whose Karabiner virtual keyboard is JIS
+(USB for power; check whether it carries data). DIP switches: SW1 OFF, SW2 ON (Mac mode), SW3–SW5
+OFF, SW6 ON (Wake Up). It has no keymap-tool
 support, so the author's own path is DIP switches → software. The HYBRID / Studio notes are for
 other users, who use PFU's keymap tool only to set the bottom row. Every unverified fact is marked
 `TODO(hardware)`; findings copied from the JIS repo say "JIS repo". When the hardware arrives,
@@ -36,7 +38,8 @@ for f in karabiner/*.json; do python3 -m json.tool "$f" >/dev/null && echo "ok $
   for each OS. When the layout changes, update the spec first, then every translation, then the
   bottom-row tables in `docs/01-hardware.md` and `docs/07-verification.md`.
 - The rule descriptions and default/alternative split in `karabiner/hhkb-us-bilingual.json` must
-  match the table in `docs/03-macos.md`.
+  match the table in `docs/03-macos.md`. `karabiner/hhkb-us-on-jis-virtual.json` must match the
+  measured table and rule table in `issues/macos-jis-virtual-keyboard.md`.
 - The hardware ladder (DIP switches → keymap tool → software) is stated in `AGENTS.md` section 2,
   `docs/01-hardware.md` and `docs/02-layout-spec.md`. Keep the three in step.
 - No binaries or scripts. Only macOS gets example config files. Windows gets one inline AutoHotkey

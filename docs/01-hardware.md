@@ -22,7 +22,7 @@ rights, a borrowed board), say so and go to the next one.
 
 | Model (US) | Connection | Keymap tool | Notes |
 | --- | --- | --- | --- |
-| **HHKB Professional BT** (author's board) | Bluetooth. `TODO(hardware)`: as far as known its USB port only supplies **power**, and all typing goes over Bluetooth. Check whether the host sees a USB keyboard at all | **None** `TODO(hardware)`: PFU's HHKB Keymap Tool isn't known to support it | DIP switches → software. Runs on AA batteries or USB power |
+| **HHKB Professional BT** (PD-KB600B; author's board) | Bluetooth (Classic, not LE). `TODO(hardware)`: as far as known its USB port only supplies **power**, and all typing goes over Bluetooth. Check whether the host sees a USB keyboard at all | **None** `TODO(hardware)`: PFU's HHKB Keymap Tool isn't known to support it | DIP switches → software. Runs on AA batteries or USB power |
 | HHKB Professional HYBRID Type-S / HYBRID | USB-C and Bluetooth | HHKB Keymap Tool | One stored keymap. `TODO(hardware)`: check whether the tool keeps separate keymaps per DIP mode |
 | HHKB Professional Classic | USB-C | HHKB Keymap Tool | |
 | HHKB Studio | USB-C and Bluetooth | HHKB Studio Keymap Tool | **Four keymap profiles** on the board, so each OS can get its own bottom row. Has a pointing stick and gesture pads |
@@ -31,9 +31,9 @@ rights, a borrowed board), say so and go to the next one.
 | Property | Value |
 | --- | --- |
 | Manufacturer | PFU Limited |
-| USB vendor ID | `1278` (0x04FE). `TODO(hardware)`: over Bluetooth, check that the host reports the same vendor ID. A Bluetooth device can report a different vendor ID source, and the Karabiner rules match on it |
-| USB product ID | `TODO(hardware)`: read it from the device list below. Don't assume it matches a JIS model (JIS HYBRID Type-S is `34`, JIS Studio is `21`) |
-| Device name | `TODO(hardware)`. JIS boards show `HHKB-Hybrid`, `HHKB-Studio` (USB) and `HHKB-Studio<n>` (Bluetooth, n = pairing slot) |
+| USB vendor ID | `1278` (0x04FE). The Pro BT reports the same vendor ID over Bluetooth (checked on macOS 27, Karabiner-Elements 16.3.0). `TODO(hardware)`: check the HYBRID family over Bluetooth |
+| Product ID | Pro BT: **`514`** (over Bluetooth). `TODO(hardware)`: other US models; read it from the device list below. Don't assume it matches a JIS model (JIS HYBRID Type-S is `34`, JIS Studio is `21`) |
+| Device name | Pro BT: `HHKB-BT` (no manufacturer string, transport `Bluetooth`). `TODO(hardware)`: other US models. JIS boards show `HHKB-Hybrid`, `HHKB-Studio` (USB) and `HHKB-Studio<n>` (Bluetooth, n = pairing slot) |
 | macOS keyboard type | **ANSI** (`40` in `/Library/Preferences/com.apple.keyboardtype`) |
 
 Check on macOS (after Karabiner-Elements is installed):
@@ -43,7 +43,8 @@ Check on macOS (after Karabiner-Elements is installed):
   | python3 -c "import json,sys;[print(d.get('product'),d['device_identifiers'],d.get('transport')) for d in json.load(sys.stdin)]"
 ```
 
-Run it once per connection the user uses (USB and Bluetooth). The JIS Studio showed up three
+Run it once per connection the user uses (USB and Bluetooth). The Pro BT shows up **once** over
+Bluetooth, as a plain keyboard (`is_keyboard` only, no pointing device). The JIS Studio showed up three
 times over USB (keyboard, pointing device, consumer) and **once** over Bluetooth, as a combined
 keyboard + pointing device (`is_keyboard` and `is_pointing_device` both true). That changes what
 Karabiner needs (`03-macos.md`).
@@ -75,17 +76,18 @@ The DIP switches are on the underside, under the small cover. Turn the keyboard 
 switch, or take the batteries out on the Pro BT) and unplug it while you flip them.
 
 Recommended setting: keep the stock row. Don't swap Alt and ◇, and don't turn the left ◇ into Fn.
+The author's Pro BT, used only with a Mac: **SW1 OFF, SW2 ON, SW3–SW5 OFF, SW6 ON**.
 
-**Pro BT / HYBRID Type-S / HYBRID / Classic US** `TODO(hardware)`: check every row against the
-manual for the exact model.
+**Pro BT / HYBRID Type-S / HYBRID / Classic US** The Pro BT (PD-KB600B) rows are checked against
+the author's board. `TODO(hardware)`: check the other models against their manuals.
 
 | SW | Function | Recommended | Why |
 | --- | --- | --- | --- |
-| SW1, SW2 | Mode (both OFF = HHKB mode, SW1 ON = Mac mode, SW2 ON = Lite Ext) | macOS-only use: **Mac mode** (SW1 ON, SW2 OFF). Otherwise: HHKB mode (both OFF) | Mac mode adds macOS Fn-layer extras. The bottom row's HID codes are the same either way. `TODO(hardware)`: confirm, and check what Mac mode does on Windows |
+| SW1, SW2 | Mode (SW1 OFF + SW2 OFF = HHKB mode, SW1 ON + SW2 OFF = Lite Ext, **SW1 OFF + SW2 ON = Mac mode**) | macOS-only use: **Mac mode** (SW1 OFF, SW2 ON). Otherwise: HHKB mode (both OFF) | Mac mode adds macOS Fn-layer extras. Author's Pro BT: Mac mode. `TODO(hardware)`: check the bottom row's raw codes in Mac mode (Step 3), and what Mac mode does on Windows |
 | SW3 | Delete → BackSpace | Your choice | Not part of this layout |
 | SW4 | Left ◇ → Fn | **OFF** | Left ◇ must stay System |
 | SW5 | Swap Alt and ◇ | **OFF** | ON would give `◇ \| Alt \| Space \| Alt \| ◇`, which puts Aux and System in the wrong places |
-| SW6 | Power saving / wake-up | Your choice; OFF to start | `TODO(hardware)`: name the exact function per model. If a Bluetooth board keeps falling asleep, see [`../issues/dip-switch-6-power-saving.md`](../issues/dip-switch-6-power-saving.md) |
+| SW6 | Pro BT: **Wake Up** (ON = enabled: a keypress wakes the board from sleep). Other models: `TODO(hardware)` | Pro BT: **ON**. Others: your choice; OFF to start | Author's Pro BT: ON. Not the Studio's inverted power saving. If a Bluetooth board keeps falling asleep, see [`../issues/dip-switch-6-power-saving.md`](../issues/dip-switch-6-power-saving.md) |
 
 **Studio US:** the Studio's switches don't match the HYBRID's. On the JIS Studio the owner's
 setting is **all OFF**: SW4 reverses the pointing-stick / gesture-pad **scroll direction**, and SW6

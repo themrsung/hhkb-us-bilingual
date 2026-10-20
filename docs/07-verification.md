@@ -37,6 +37,7 @@ Bluetooth, run rows 2–8 over **each** connection.
 | macOS: Caps Lock turns on Caps Lock instead of switching | "Use the Caps Lock key to switch to and from ABC" is off, or the tap was a long press | Turn the setting on (`03-macos.md`); or use the Ctrl+Space rule |
 | macOS: toggle misses taps | Caps Lock switching's built-in delay | Use the Ctrl+Space rule instead |
 | macOS: menu bar says Korean, the field types English (rare) | A `select_input_source`-style switch was added (Karabiner, Hammerspoon, im-select) | Go back to the key-event rules in `karabiner/` (`../issues/macos-cjk-select-desync.md`) |
+| macOS: the US HHKB types JIS symbols (Shift+2 → `"`) | Karabiner modifies it, and the virtual keyboard is JIS (a JIS HHKB shares the Mac) | Set the HHKB's device entry back to `ignore: true` and use Ctrl+Space (`../issues/macos-jis-virtual-keyboard.md`) |
 | macOS: the MacBook's own keyboard types wrong symbols | It's JIS or ISO, and Karabiner sends it through the ANSI virtual keyboard | Set the built-in keyboard's device entry to `ignore: true` (`03-macos.md`) |
 | macOS: the keymap tool's `LANG1` key does nothing | The LANG1 rule isn't enabled (macOS has no native use for `LANG1` with Korean) | Enable "LANG1 → Caps Lock" in Karabiner, or set right ◇ to Caps Lock in the keymap tool if the board is macOS-only |
 | LangToggle lands in a third input source | More than two sources enabled | Remove the extra source, or ask the user which two they want |
